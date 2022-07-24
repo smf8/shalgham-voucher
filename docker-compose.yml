@@ -1,0 +1,23 @@
+version: "3.5"
+services:
+  
+  crdb:
+   image: cockroachdb/cockroach:v22.1.2
+   ports:
+     - "26257:26257"
+     - "8080:8080"
+   command: start-single-node --insecure
+   volumes:
+     - "${PWD}/cockroach-data/crdb:/cockroach/cockroach-data"
+
+  backend:
+    build:
+      context: .
+    container_name: privnot
+    command: ["sh", "-c", "sleep 10 && ./wallet"]
+    environment:
+      - WALLET_DATABASE_CONNECTION__ADDRESS=postgresql://root@crdb:26257/defaultdb
+    ports:
+      - "8000:8000"
+    depends_on:
+      - 'crdb'
