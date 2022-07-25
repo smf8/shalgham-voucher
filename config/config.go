@@ -17,9 +17,37 @@ import (
 const _Prefix = "WALLET_"
 
 type Config struct {
-	Port     string   `koanf:"port"`
-	Debug    bool     `koanf:"debug"`
-	Database Database `koanf:"database"`
+	Port         string       `koanf:"port"`
+	Debug        bool         `koanf:"debug"`
+	Database     Database     `koanf:"database"`
+	WalletClient WalletClient `koanf:"wallet_client"`
+	Redis        Redis        `koanf:"redis"`
+	VoucherCache VoucherCache `koanf:"voucher_cache"`
+}
+
+type WalletClient struct {
+	Timeout time.Duration `koanf:"timeout"`
+	Debug   bool          `koanf:"debug"`
+	BaseURL string        `koanf:"base_url"`
+}
+
+type VoucherCache struct {
+	CronDuration string `koanf:"cron_duration"`
+}
+
+type Redis struct {
+	Addresses       []string      `koanf:"address"`
+	MasterName      string        `koanf:"master-name"`
+	PoolSize        int           `koanf:"pool-size"`
+	MinIdleConns    int           `koanf:"min-idle-conns"`
+	DialTimeout     time.Duration `koanf:"dial-timeout"`
+	ReadTimeout     time.Duration `koanf:"read-timeout"`
+	WriteTimeout    time.Duration `koanf:"write-timeout"`
+	PoolTimeout     time.Duration `koanf:"pool-timeout"`
+	IdleTimeout     time.Duration `koanf:"idle-timeout"`
+	MaxRetries      int           `koanf:"max-retries"`
+	MinRetryBackoff time.Duration `koanf:"min-retry-backoff"`
+	MaxRetryBackoff time.Duration `koanf:"max-retry-backoff"`
 }
 
 type Database struct {
@@ -32,11 +60,14 @@ type Database struct {
 }
 
 var def Config = Config{
-	Port: ":8001",
+	Port: ":8000",
 	Database: Database{
-		ConnectionAddress: "postgresql://smf8:owKoCRiy0_9epYxC9wQ8rg@free-tier7.aws-eu-west-1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full&options=--cluster%3Dsag-to-rayanesh-2755",
-		RetryDelay:        time.Second,
-		MaxRetry:          20,
+		ConnectionAddress:  "postgresql://smf8:owKoCRiy0_9epYxC9wQ8rg@free-tier7.aws-eu-west-1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full&options=--cluster%3Dsag-to-rayanesh-2755",
+		RetryDelay:         time.Second,
+		MaxRetry:           20,
+		ConnectionLifetime: 30 * time.Minute,
+		MaxOpenConnections: 10,
+		MaxIdleConnections: 5,
 	},
 }
 
