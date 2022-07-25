@@ -10,6 +10,18 @@ services:
    volumes:
      - "${PWD}/cockroach-data/crdb:/cockroach/cockroach-data"
 
+
+  redis-sentinel:
+    image: docker.io/bitnami/redis-sentinel:7.0
+    volumes:
+      - redis-sentinel_data:/bitnami
+  redis:
+    image: docker.io/bitnami/redis:7.0
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - redis_data:/bitnami
+
   backend:
     build:
       context: .
@@ -21,3 +33,9 @@ services:
       - "8000:8000"
     depends_on:
       - 'crdb'
+
+volumes:
+  redis-sentinel_data:
+    driver: local
+  redis_data:
+    driver: local
