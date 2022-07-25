@@ -1,9 +1,6 @@
 package main
 
 import (
-	"arvan-challenge/config"
-	"arvan-challenge/database"
-	"arvan-challenge/handler"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -11,6 +8,9 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"voucher/config"
+	"voucher/database"
+	"voucher/handler"
 )
 
 func main() {

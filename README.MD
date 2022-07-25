@@ -1,33 +1,6 @@
-# Wallet Manager
+# Voucher Manager
 
 ## Architecture
-Service will listen to confirmed transactions through CMQ (It's better to be a persisted solution to provider high availability).
+Service will listen through HTTP API for voucher redemption requests. Redeeming is done atomically to avoid inconsistency. 
 
-
-```text
-┌─────────┐       ┌──Wallet──────────────────────────────────────────────────────────────────┐
-│Message  │       │                                                                          │
-│Queue    │       │                                                                          │
-│         │       │             ┌───────────┬───Application────┐      ┌───SQL-Database──┐    │
-│         │       │             │  Consumer │                  │      │                 │    │
-│         │       │             │           │                  │      │                 │    │
-│         ├───────┼────Consume──►           │                  │      │                 │    │
-│  NATS   │       │             │           │    Monotiring    │      │                 │    │
-│         │       │             │           │                  │      │                 │    │
-│  KAFKA  │       │             │           │    Repository    │      │                 │    │
-│         │       │             │           │                  │      │                 │    │
-└─────────┘       │             ├───────────┤                  │      │                 │    │
-                  │             │  REST API │                  ◄──────►                 │    │
-                  │             │           │                  │      │                 │    │
-┌─────────┐       │             │           │                  │      │                 │    │
-│ Client  │       │             │           │                  │      │                 │    │
-│         │       │             │           │                  │      │                 │    │
-│         ◄───────┼─────REST────►           │                  │      │                 │    │
-│         │       │             │           │                  │      │                 │    │
-│         │       │             │           │                  │      │                 │    │
-│         │       │             └───────────┴──────────────────┘      └─────────────────┘    │
-│         │       │                                                                          │
-│         │       └──────────────────────────────────────────────────────────────────────────┘
-│         │
-└─────────┘
-```
+Any insertion will be checked with redis with atomic `Decr` command. allowed writes are then persisted into database. any failure on insert (i.e. duplicate record) will revert the `Decr` method.

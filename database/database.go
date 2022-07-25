@@ -1,10 +1,10 @@
 package database
 
 import (
-	"arvan-challenge/config"
 	"github.com/avast/retry-go/v4"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"voucher/config"
 )
 
 // NewConnection will attempt connecting to database with given retry options.
