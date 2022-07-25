@@ -17,7 +17,6 @@ type Redeemer struct {
 
 func (r *Redeemer) RedeemVoucher(c *fiber.Ctx) error {
 	request := &RedeemRequest{}
-	logger := logrus.WithField("func", "RedeemVoucher")
 
 	if err := c.BodyParser(request); err != nil {
 		return c.Status(http.StatusBadRequest).SendString(err.Error())
@@ -40,7 +39,7 @@ func (r *Redeemer) RedeemVoucher(c *fiber.Ctx) error {
 
 	valid, err := r.VoucherRemainderRepo.Use(c.UserContext(), request.Code)
 	if err != nil {
-		logger.Errorf("voucher remainder repo failed: %s", err.Error())
+		logrus.Errorf("voucher remainder repo failed: %s", err.Error())
 
 		return c.SendStatus(http.StatusInternalServerError)
 	}
@@ -65,14 +64,14 @@ func (r *Redeemer) RedeemVoucher(c *fiber.Ctx) error {
 
 	transactionErr = r.RedemptionRepo.Create(redemption)
 	if transactionErr != nil {
-		logger.Errorf("redemption create failed: %s", transactionErr.Error())
+		logrus.Errorf("redemption create failed: %s", transactionErr.Error())
 
 		return c.SendStatus(http.StatusInternalServerError)
 	}
 
 	transactionErr = r.Client.ApplyTransaction(request.PhoneNumber, voucherAmount)
 	if err != nil {
-		logger.Errorf("transaction apply failed: %s", transactionErr.Error())
+		logrus.Errorf("transaction apply failed: %s", transactionErr.Error())
 
 		return c.SendStatus(http.StatusInternalServerError)
 	}
