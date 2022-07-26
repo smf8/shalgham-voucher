@@ -4,8 +4,8 @@ import (
 	"errors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
+	"github.com/smf8/arvan-voucher/internal/app/model"
 	"net/http"
-	"voucher/model"
 )
 
 type Voucher struct {

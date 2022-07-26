@@ -2,6 +2,8 @@ package config
 
 import (
 	"fmt"
+	"github.com/smf8/arvan-voucher/pkg/database"
+	"github.com/smf8/arvan-voucher/pkg/redis"
 	"strings"
 	"time"
 
@@ -14,15 +16,15 @@ import (
 	"github.com/knadh/koanf/providers/structs"
 )
 
-const _Prefix = "WALLET_"
+const _Prefix = "VOUCHER_"
 
 type Config struct {
-	Port         string       `koanf:"port"`
-	Debug        bool         `koanf:"debug"`
-	Database     Database     `koanf:"database"`
-	WalletClient WalletClient `koanf:"wallet_client"`
-	Redis        Redis        `koanf:"redis"`
-	VoucherCache VoucherCache `koanf:"voucher_cache"`
+	Port         string                  `koanf:"port"`
+	Debug        bool                    `koanf:"debug"`
+	Database     database.DatabaseConfig `koanf:"database"`
+	WalletClient WalletClient            `koanf:"wallet_client"`
+	Redis        redis.RedisConfig       `koanf:"redis"`
+	VoucherCache VoucherCache            `koanf:"voucher_cache"`
 }
 
 type WalletClient struct {
@@ -35,33 +37,9 @@ type VoucherCache struct {
 	CronDuration string `koanf:"cron_duration"`
 }
 
-type Redis struct {
-	Addresses       []string      `koanf:"address"`
-	MasterName      string        `koanf:"master-name"`
-	PoolSize        int           `koanf:"pool-size"`
-	MinIdleConns    int           `koanf:"min-idle-conns"`
-	DialTimeout     time.Duration `koanf:"dial-timeout"`
-	ReadTimeout     time.Duration `koanf:"read-timeout"`
-	WriteTimeout    time.Duration `koanf:"write-timeout"`
-	PoolTimeout     time.Duration `koanf:"pool-timeout"`
-	IdleTimeout     time.Duration `koanf:"idle-timeout"`
-	MaxRetries      int           `koanf:"max-retries"`
-	MinRetryBackoff time.Duration `koanf:"min-retry-backoff"`
-	MaxRetryBackoff time.Duration `koanf:"max-retry-backoff"`
-}
-
-type Database struct {
-	ConnectionAddress  string        `koanf:"connection-address"`
-	RetryDelay         time.Duration `koanf:"note-expiry"`
-	MaxRetry           uint          `koanf:"max-retry"`
-	ConnectionLifetime time.Duration `koanf:"connection-lifetime"`
-	MaxOpenConnections int           `koanf:"max-open-connections"`
-	MaxIdleConnections int           `koanf:"max-idle-connections"`
-}
-
 var def = Config{
 	Port: ":8000",
-	Database: Database{
+	Database: database.DatabaseConfig{
 		ConnectionAddress:  "postgresql://root@127.0.0.1:26257/defaultdb",
 		RetryDelay:         time.Second,
 		MaxRetry:           20,
@@ -69,7 +47,7 @@ var def = Config{
 		MaxOpenConnections: 10,
 		MaxIdleConnections: 5,
 	},
-	Redis: Redis{
+	Redis: redis.RedisConfig{
 		Addresses:       []string{"localhost:26379"},
 		MasterName:      "mymaster",
 		PoolSize:        0,

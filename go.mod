@@ -1,4 +1,4 @@
-module voucher
+module github.com/smf8/arvan-voucher
 
 go 1.18
 

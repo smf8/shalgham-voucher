@@ -3,10 +3,10 @@ package wallet
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/smf8/arvan-voucher/internal/app/config"
 	"net/http"
 	"strings"
 	"time"
-	"voucher/config"
 )
 
 type Client struct {

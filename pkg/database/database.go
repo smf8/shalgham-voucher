@@ -4,11 +4,20 @@ import (
 	"github.com/avast/retry-go/v4"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"voucher/config"
+	"time"
 )
 
+type DatabaseConfig struct {
+	ConnectionAddress  string        `koanf:"connection-address"`
+	RetryDelay         time.Duration `koanf:"note-expiry"`
+	MaxRetry           uint          `koanf:"max-retry"`
+	ConnectionLifetime time.Duration `koanf:"connection-lifetime"`
+	MaxOpenConnections int           `koanf:"max-open-connections"`
+	MaxIdleConnections int           `koanf:"max-idle-connections"`
+}
+
 // NewConnection will attempt connecting to database with given retry options.
-func NewConnection(cfg config.Database) (db *gorm.DB, finalErr error) {
+func NewConnection(cfg DatabaseConfig) (db *gorm.DB, finalErr error) {
 	finalErr = retry.Do(func() error {
 		db, finalErr = gorm.Open(postgres.Open(cfg.ConnectionAddress), &gorm.Config{})
 		if finalErr != nil {

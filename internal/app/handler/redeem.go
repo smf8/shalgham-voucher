@@ -3,9 +3,9 @@ package handler
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
+	"github.com/smf8/arvan-voucher/internal/app/model"
+	"github.com/smf8/arvan-voucher/internal/app/wallet"
 	"net/http"
-	"voucher/model"
-	"voucher/wallet"
 )
 
 type Redeemer struct {
@@ -53,7 +53,9 @@ func (r *Redeemer) RedeemVoucher(c *fiber.Ctx) error {
 	// if transaction fails. we revert counter decrease
 	defer func() {
 		if transactionErr != nil {
-			r.VoucherRemainderRepo.Revert(c.UserContext(), request.Code)
+			if err := r.VoucherRemainderRepo.Revert(c.UserContext(), request.Code); err != nil {
+				logrus.Errorf("redeem revert failed: %s", err.Error())
+			}
 		}
 	}()
 

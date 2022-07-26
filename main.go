@@ -5,12 +5,12 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/sirupsen/logrus"
+	"github.com/smf8/arvan-voucher/internal/app/config"
+	"github.com/smf8/arvan-voucher/internal/app/handler"
+	"github.com/smf8/arvan-voucher/pkg/database"
 	"os"
 	"os/signal"
 	"syscall"
-	"voucher/config"
-	"voucher/database"
-	"voucher/handler"
 )
 
 func main() {

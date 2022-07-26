@@ -2,12 +2,12 @@ package model
 
 import (
 	"context"
+	"github.com/smf8/arvan-voucher/internal/app/config"
+	"github.com/smf8/arvan-voucher/pkg/database"
+	"github.com/smf8/arvan-voucher/pkg/redis"
 	"github.com/stretchr/testify/suite"
 	"sync"
 	"testing"
-	"voucher/config"
-	"voucher/database"
-	"voucher/redis"
 )
 
 type VoucherTestSuite struct {
