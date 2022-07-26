@@ -19,14 +19,6 @@ func main() {
 
 	app := router.New(cfg.Server)
 
-	api := app.Group("/api")
-
-	go func() {
-		if err := app.Listen(cfg.Server.Port); err != nil {
-			logrus.Fatalf("http server failed: %s", err.Error())
-		}
-	}()
-
 	db, err := database.NewConnection(cfg.Database)
 	if err != nil {
 		logrus.Fatalf("database failed: %s", err.Error())
@@ -37,7 +29,12 @@ func main() {
 	defer redisCloser()
 
 	voucherRepo := &model.SQLVoucherRepo{DB: db}
+
 	voucherCache := model.NewInMemoryVoucherCache(voucherRepo)
+
+	if err := voucherCache.Start(cfg.VoucherCache.CronPattern); err != nil {
+		logrus.Fatalf("voucher cache failed: %s", err)
+	}
 
 	redemptionRepo := &model.SQLRedemptionRepo{DB: db}
 	voucherRemainderRepo := &model.RedisVoucherRemainderRepo{Redis: rc}
@@ -56,10 +53,17 @@ func main() {
 	}
 
 	// Register Routes
-	api.Get("/voucher", voucherHandler.GetVoucher)
-	api.Post("/voucher", voucherHandler.Save)
-	api.Post("/voucher/redeem", redeemerHandler.RedeemVoucher)
-	api.Get("/voucher/report", voucherHandler.Report)
+	api := app.Group("/api")
+	api.Post("/vouchers", voucherHandler.Save)
+	api.Get("/vouchers", voucherHandler.GetVoucher)
+	api.Post("/vouchers/redeem", redeemerHandler.RedeemVoucher)
+	api.Get("/vouchers/report", voucherHandler.Report)
+
+	go func() {
+		if err := app.Listen(cfg.Server.Port); err != nil {
+			logrus.Fatalf("http server failed: %s", err.Error())
+		}
+	}()
 
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, os.Interrupt, syscall.SIGTERM)

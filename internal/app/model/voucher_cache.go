@@ -48,7 +48,7 @@ func (c *InMemoryVoucherCache) Start(cronPattern string) error {
 	}
 
 	cronJob := cron.New()
-	if _, err := cronJob.AddFunc("@every "+cronPattern, func() {
+	if _, err := cronJob.AddFunc(cronPattern, func() {
 		if err := c.fetch(); err != nil {
 			logrus.Errorf("voucher cache: cron job fetch failed: %s", err.Error())
 		}

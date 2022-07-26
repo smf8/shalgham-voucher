@@ -79,5 +79,12 @@ func (v *Voucher) Save(c *fiber.Ctx) error {
 		return c.SendStatus(http.StatusInternalServerError)
 	}
 
+	if err := v.VoucherRemainderRepo.Create(
+		c.UserContext(), voucherRequest.Code, voucherRequest.Limit); err != nil {
+		logrus.Errorf("voucher remainder save failed: %s", err.Error())
+
+		return c.SendStatus(http.StatusInternalServerError)
+	}
+
 	return c.Status(http.StatusCreated).JSON(voucherRequest)
 }

@@ -34,7 +34,7 @@ type WalletClient struct {
 }
 
 type VoucherCache struct {
-	CronDuration string `koanf:"cron_duration"`
+	CronPattern string `koanf:"cron_pattern"`
 }
 
 var def = Config{
@@ -64,6 +64,14 @@ var def = Config{
 		MaxRetries:      5,
 		MinRetryBackoff: time.Second,
 		MaxRetryBackoff: 3 * time.Second,
+	},
+	VoucherCache: VoucherCache{
+		CronPattern: "@every 15s",
+	},
+	WalletClient: WalletClient{
+		Timeout: 5 * time.Second,
+		Debug:   true,
+		BaseURL: "127.0.0.1:8001",
 	},
 }
 

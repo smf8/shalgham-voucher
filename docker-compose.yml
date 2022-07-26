@@ -28,21 +28,21 @@ services:
       - '26379:26379'
     networks:
       - app-tier
-  backend:
-    build:
-      context: .
-    container_name: voucher
-    command: ["sh", "-c", "sleep 10 && ./voucher"]
-    environment:
-      - WALLET_DATABASE_CONNECTION__ADDRESS=postgresql://root@crdb:26257/defaultdb
-    ports:
-      - "8000:8000"
-    depends_on:
-      - 'crdb'
-      - redis-sentinel
-      - redis
-    networks:
-      - app-tier
+#  backend:
+#    build:
+#      context: .
+#    container_name: voucher
+#    command: ["sh", "-c", "sleep 10 && ./voucher"]
+#    environment:
+#      - WALLET_DATABASE_CONNECTION__ADDRESS=postgresql://root@crdb:26257/defaultdb
+#    ports:
+#      - "8000:8000"
+#    depends_on:
+#      - 'crdb'
+#      - redis-sentinel
+#      - redis
+#    networks:
+#      - app-tier
 
 volumes:
   redis-sentinel_data:

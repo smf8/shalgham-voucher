@@ -117,7 +117,7 @@ func (v *SQLVoucherRepo) Find(voucherCode string) (*Voucher, error) {
 
 	if err := v.DB.Where("code = ?", voucherCode).First(&result).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, fmt.Errorf("sql voucher find error: %w", err)
+			return nil, fmt.Errorf("sql voucher find error: %w", ErrRecordNotFound)
 		}
 
 		return nil, err
