@@ -7,6 +7,7 @@ import (
 	"github.com/smf8/arvan-voucher/internal/app/model"
 	"github.com/smf8/arvan-voucher/internal/app/wallet"
 	"github.com/smf8/arvan-voucher/pkg/database"
+	"github.com/smf8/arvan-voucher/pkg/log"
 	"github.com/smf8/arvan-voucher/pkg/redis"
 	"github.com/smf8/arvan-voucher/pkg/router"
 	"os"
@@ -16,6 +17,8 @@ import (
 
 func main() {
 	cfg := config.New()
+
+	log.SetupLogger(cfg.LogLevel)
 
 	app := router.New(cfg.Server)
 

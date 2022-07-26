@@ -20,6 +20,7 @@ import (
 const _Prefix = "VOUCHER_"
 
 type Config struct {
+	LogLevel     string                  `koanf:"log_level"`
 	Server       router.ServerConfig     `koanf:"server"`
 	Database     database.DatabaseConfig `koanf:"database"`
 	WalletClient WalletClient            `koanf:"wallet_client"`
@@ -38,6 +39,7 @@ type VoucherCache struct {
 }
 
 var def = Config{
+	LogLevel: "debug",
 	Server: router.ServerConfig{
 		Port:      ":8000",
 		Debug:     true,

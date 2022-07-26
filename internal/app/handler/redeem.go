@@ -34,6 +34,8 @@ func (r *Redeemer) RedeemVoucher(c *fiber.Ctx) error {
 
 	voucherAmount, err := r.VoucherCache.GetVoucherAmount(request.Code)
 	if err != nil {
+		logrus.Debugf("voucher cache get failed: %s", err.Error())
+
 		return c.SendStatus(http.StatusNotFound)
 	}
 
@@ -45,6 +47,8 @@ func (r *Redeemer) RedeemVoucher(c *fiber.Ctx) error {
 	}
 
 	if !valid {
+		logrus.Debugf("voucher remainder repo: not valid")
+
 		return c.SendStatus(http.StatusNotFound)
 	}
 
