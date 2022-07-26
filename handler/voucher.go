@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
 	"net/http"
@@ -38,6 +39,10 @@ func (v *Voucher) GetVoucher(c *fiber.Ctx) error {
 
 	voucher, err := v.VoucherRepo.Find(voucherCode)
 	if err != nil {
+		if errors.Is(err, model.ErrRecordNotFound) {
+			return c.SendStatus(http.StatusNotFound)
+		}
+
 		logrus.Errorf("voucher find failed: %s", err.Error())
 
 		return c.SendStatus(http.StatusInternalServerError)

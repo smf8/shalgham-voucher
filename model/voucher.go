@@ -2,11 +2,15 @@ package model
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
 	"strconv"
 	"time"
 )
+
+var ErrRecordNotFound = errors.New("record not found")
 
 type Voucher struct {
 	ID        int64     `json:"id"`
@@ -112,6 +116,10 @@ func (v *SQLVoucherRepo) Find(voucherCode string) (*Voucher, error) {
 	var result Voucher
 
 	if err := v.DB.Where("code = ?", voucherCode).First(&result).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("sql voucher find error: %w", err)
+		}
+
 		return nil, err
 	}
 
