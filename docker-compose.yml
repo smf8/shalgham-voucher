@@ -9,33 +9,47 @@ services:
    command: start-single-node --insecure
    volumes:
      - "${PWD}/cockroach-data/crdb:/cockroach/cockroach-data"
+   networks:
+     - app-tier
 
-
-  redis-sentinel:
-    image: docker.io/bitnami/redis-sentinel:7.0
-    volumes:
-      - redis-sentinel_data:/bitnami
   redis:
-    image: docker.io/bitnami/redis:7.0
+    image: 'bitnami/redis:latest'
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
-    volumes:
-      - redis_data:/bitnami
-
+    networks:
+      - app-tier
+    ports:
+      - '6379:6379'
+  redis-sentinel:
+    image: 'bitnami/redis-sentinel:latest'
+    environment:
+      - REDIS_MASTER_HOST=127.0.0.1
+    ports:
+      - '26379:26379'
+    networks:
+      - app-tier
   backend:
     build:
       context: .
-    container_name: privnot
-    command: ["sh", "-c", "sleep 10 && ./wallet"]
+    container_name: voucher
+    command: ["sh", "-c", "sleep 10 && ./voucher"]
     environment:
       - WALLET_DATABASE_CONNECTION__ADDRESS=postgresql://root@crdb:26257/defaultdb
     ports:
       - "8000:8000"
     depends_on:
       - 'crdb'
+      - redis-sentinel
+      - redis
+    networks:
+      - app-tier
 
 volumes:
   redis-sentinel_data:
     driver: local
   redis_data:
     driver: local
+
+networks:
+  app-tier:
+    driver: bridge
