@@ -28,7 +28,12 @@ func (v *Voucher) Report(c *fiber.Ctx) error {
 		return c.SendStatus(http.StatusInternalServerError)
 	}
 
-	return c.JSON(redemptions)
+	response := RedemptionReportResponse{
+		Length:      len(redemptions),
+		Redemptions: redemptions,
+	}
+
+	return c.JSON(response)
 }
 
 func (v *Voucher) GetVoucher(c *fiber.Ctx) error {

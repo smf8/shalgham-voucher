@@ -100,7 +100,7 @@ func (r *SQLRedemptionRepo) Create(redemption *Redemption) error {
 func (r *SQLRedemptionRepo) FindRedemptions(voucherCode string, limit, offset int) ([]Redemption, error) {
 	var result []Redemption
 
-	err := r.DB.Where("code = ?", voucherCode).Limit(limit).Offset(offset).Find(&result).Error
+	err := r.DB.Where("voucher_code = ?", voucherCode).Limit(limit).Offset(offset).Find(&result).Error
 	if err != nil {
 		return nil, err
 	}
