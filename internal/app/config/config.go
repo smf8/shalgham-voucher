@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/smf8/arvan-voucher/pkg/database"
 	"github.com/smf8/arvan-voucher/pkg/redis"
+	"github.com/smf8/arvan-voucher/pkg/router"
 	"strings"
 	"time"
 
@@ -19,8 +20,7 @@ import (
 const _Prefix = "VOUCHER_"
 
 type Config struct {
-	Port         string                  `koanf:"port"`
-	Debug        bool                    `koanf:"debug"`
+	Server       router.ServerConfig     `koanf:"server"`
 	Database     database.DatabaseConfig `koanf:"database"`
 	WalletClient WalletClient            `koanf:"wallet_client"`
 	Redis        redis.RedisConfig       `koanf:"redis"`
@@ -38,7 +38,11 @@ type VoucherCache struct {
 }
 
 var def = Config{
-	Port: ":8000",
+	Server: router.ServerConfig{
+		Port:      ":8000",
+		Debug:     true,
+		NameSpace: "voucher",
+	},
 	Database: database.DatabaseConfig{
 		ConnectionAddress:  "postgresql://root@127.0.0.1:26257/defaultdb",
 		RetryDelay:         time.Second,
