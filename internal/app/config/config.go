@@ -73,7 +73,7 @@ var def = Config{
 	WalletClient: WalletClient{
 		Timeout: 5 * time.Second,
 		Debug:   true,
-		BaseURL: "127.0.0.1:8001",
+		BaseURL: "http://127.0.0.1:8001",
 	},
 }
 

@@ -68,16 +68,16 @@ func (r *Redeemer) RedeemVoucher(c *fiber.Ctx) error {
 		Redeemer:    request.PhoneNumber,
 	}
 
-	transactionErr = r.RedemptionRepo.Create(redemption)
+	transactionErr = r.Client.ApplyTransaction(request.PhoneNumber, voucherAmount)
 	if transactionErr != nil {
-		logrus.Errorf("redemption create failed: %s", transactionErr.Error())
+		logrus.Errorf("transaction apply failed: %s", transactionErr.Error())
 
 		return c.SendStatus(http.StatusInternalServerError)
 	}
 
-	transactionErr = r.Client.ApplyTransaction(request.PhoneNumber, voucherAmount)
-	if err != nil {
-		logrus.Errorf("transaction apply failed: %s", transactionErr.Error())
+	transactionErr = r.RedemptionRepo.Create(redemption)
+	if transactionErr != nil {
+		logrus.Errorf("redemption create failed: %s", transactionErr.Error())
 
 		return c.SendStatus(http.StatusInternalServerError)
 	}
