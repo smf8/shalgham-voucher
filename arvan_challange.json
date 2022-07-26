@@ -1,0 +1,234 @@
+{
+	"info": {
+		"_postman_id": "9e806431-1866-463c-a421-7f2be714137a",
+		"name": "Finance System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Wallet",
+			"item": [
+				{
+					"name": "Create Profile",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone_number\": \"+989371209055\",\n    \"balance\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{walletURL}}/api/profiles",
+							"host": [
+								"{{walletURL}}"
+							],
+							"path": [
+								"api",
+								"profiles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Profile Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{walletURL}}/api/profiles/+989371209055",
+							"host": [
+								"{{walletURL}}"
+							],
+							"path": [
+								"api",
+								"profiles",
+								"+989371209055"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transaction",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone_number\": \"+989371209055\",\n    \"amount\": 10000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{walletURL}}/api/transactions",
+							"host": [
+								"{{walletURL}}"
+							],
+							"path": [
+								"api",
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Voucher",
+			"item": [
+				{
+					"name": "Create Voucher",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"code\": \"test_voucher\",\n    \"amount\": 2000,\n    \"limit\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{voucherURL}}/api/vouchers",
+							"host": [
+								"{{voucherURL}}"
+							],
+							"path": [
+								"api",
+								"vouchers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Voucher",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{voucherURL}}/api/vouchers?code=test_voucher",
+							"host": [
+								"{{voucherURL}}"
+							],
+							"path": [
+								"api",
+								"vouchers"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "test_voucher"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Redeem Voucher",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone_number\": \"+989371209055\",\n    \"code\": \"test_voucher\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{voucherURL}}/api/vouchers/redeem",
+							"host": [
+								"{{voucherURL}}"
+							],
+							"path": [
+								"api",
+								"vouchers",
+								"redeem"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Voucher Report",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"code\": \"test_voucher\",\n    \"limit\": 10,\n    \"offset\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{voucherURL}}/api/vouchers/report",
+							"host": [
+								"{{voucherURL}}"
+							],
+							"path": [
+								"api",
+								"vouchers",
+								"report"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "voucherURL",
+			"value": "localhost:8000",
+			"type": "default"
+		},
+		{
+			"key": "walletURL",
+			"value": "localhost:8001",
+			"type": "default"
+		}
+	]
+}
