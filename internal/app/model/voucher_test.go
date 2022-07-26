@@ -24,15 +24,15 @@ func (suite *VoucherTestSuite) SetupSuite() {
 
 	suite.NoError(err)
 
-	//rc, _ := redis.New(cfg.Redis)
+	rc, _ := redis.New(cfg.Redis)
 
-	//suite.voucherRemainderRepo = &RedisVoucherRemainderRepo{Redis: rc}
+	suite.voucherRemainderRepo = &RedisVoucherRemainderRepo{Redis: rc}
 	suite.voucherRepo = &SQLVoucherRepo{DB: db}
 	suite.redemptionRepo = &SQLRedemptionRepo{DB: db}
 }
 
 func (suite *VoucherTestSuite) SetupTest() {
-	//suite.NoError(suite.voucherRemainderRepo.Redis.FlushDB(context.Background()).Err())
+	suite.NoError(suite.voucherRemainderRepo.Redis.FlushDB(context.Background()).Err())
 	suite.voucherRepo.DB.Exec("truncate vouchers, redemptions")
 }
 
