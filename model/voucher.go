@@ -54,7 +54,7 @@ type RedisVoucherRemainderRepo struct {
 }
 
 func (r *RedisVoucherRemainderRepo) voucherRemainderKey(voucherCode string) string {
-	return "voucher:remainder" + voucherCode
+	return "voucher:remainder:" + voucherCode
 }
 
 func (r *RedisVoucherRemainderRepo) Use(ctx context.Context, voucherCode string) (bool, error) {
@@ -63,7 +63,7 @@ func (r *RedisVoucherRemainderRepo) Use(ctx context.Context, voucherCode string)
 		return false, err
 	}
 
-	return result < 0, nil
+	return result > 0, nil
 }
 
 func (r *RedisVoucherRemainderRepo) Get(ctx context.Context, voucherCode string) (int, error) {

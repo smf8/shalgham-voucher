@@ -59,15 +59,29 @@ type Database struct {
 	MaxIdleConnections int           `koanf:"max-idle-connections"`
 }
 
-var def Config = Config{
+var def = Config{
 	Port: ":8000",
 	Database: Database{
-		ConnectionAddress:  "postgresql://smf8:owKoCRiy0_9epYxC9wQ8rg@free-tier7.aws-eu-west-1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full&options=--cluster%3Dsag-to-rayanesh-2755",
+		ConnectionAddress:  "postgresql://root@crdb:26257/defaultdb",
 		RetryDelay:         time.Second,
 		MaxRetry:           20,
 		ConnectionLifetime: 30 * time.Minute,
 		MaxOpenConnections: 10,
 		MaxIdleConnections: 5,
+	},
+	Redis: Redis{
+		Addresses:       []string{"localhost:26379"},
+		MasterName:      "mymaster",
+		PoolSize:        0,
+		MinIdleConns:    20,
+		DialTimeout:     5 * time.Second,
+		ReadTimeout:     3 * time.Second,
+		WriteTimeout:    3 * time.Second,
+		PoolTimeout:     4 * time.Second,
+		IdleTimeout:     5 * time.Minute,
+		MaxRetries:      5,
+		MinRetryBackoff: time.Second,
+		MaxRetryBackoff: 3 * time.Second,
 	},
 }
 
