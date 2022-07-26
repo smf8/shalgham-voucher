@@ -6,6 +6,7 @@ import (
 	"sync"
 	"testing"
 	"voucher/config"
+	"voucher/database"
 	"voucher/redis"
 )
 
@@ -19,20 +20,20 @@ type VoucherTestSuite struct {
 func (suite *VoucherTestSuite) SetupSuite() {
 	cfg := config.New()
 
-	//db, err := database.NewConnection(cfg.Database)
+	db, err := database.NewConnection(cfg.Database)
 
-	//suite.NoError(err)
+	suite.NoError(err)
 
-	rc, _ := redis.New(cfg.Redis)
+	//rc, _ := redis.New(cfg.Redis)
 
-	suite.voucherRemainderRepo = &RedisVoucherRemainderRepo{Redis: rc}
-	//suite.voucherRepo = &SQLVoucherRepo{DB: db}
-	//suite.redemptionRepo = &SQLRedemptionRepo{DB: db}
+	//suite.voucherRemainderRepo = &RedisVoucherRemainderRepo{Redis: rc}
+	suite.voucherRepo = &SQLVoucherRepo{DB: db}
+	suite.redemptionRepo = &SQLRedemptionRepo{DB: db}
 }
 
 func (suite *VoucherTestSuite) SetupTest() {
-	suite.NoError(suite.voucherRemainderRepo.Redis.FlushDB(context.Background()).Err())
-	//suite.voucherRepo.DB.Exec("truncate voucher, redemption")
+	//suite.NoError(suite.voucherRemainderRepo.Redis.FlushDB(context.Background()).Err())
+	suite.voucherRepo.DB.Exec("truncate vouchers, redemptions")
 }
 
 func (suite *VoucherTestSuite) TestVoucherRemainder() {
@@ -87,7 +88,41 @@ func (suite *VoucherTestSuite) TestVoucherRemainder() {
 
 		suite.Equal(finalValue, value)
 	})
+}
 
+func (suite *VoucherTestSuite) TestVoucherRepo() {
+	suite.Run("Create/Read", func() {
+		v1 := &Voucher{
+			Code:   "test_v1",
+			Amount: 1000,
+			Limit:  10,
+		}
+
+		suite.NoError(suite.voucherRepo.Save(v1))
+
+		result, err := suite.voucherRepo.Find(v1.Code)
+		suite.NoError(err)
+
+		suite.Equal(v1.Amount, result.Amount)
+		suite.Equal(v1.Limit, result.Limit)
+	})
+
+	suite.Run("Delete", func() {
+		v1 := &Voucher{
+			Code:   "test_v2",
+			Amount: 1001,
+			Limit:  11,
+		}
+
+		suite.NoError(suite.voucherRepo.Save(v1))
+
+		suite.NoError(suite.voucherRepo.Delete(v1.Code))
+
+		result, err := suite.voucherRepo.Find(v1.Code)
+
+		suite.Error(err)
+		suite.Nil(result)
+	})
 }
 
 func TestVoucherTestSuite(t *testing.T) {

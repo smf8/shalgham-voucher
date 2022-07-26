@@ -62,7 +62,7 @@ type Database struct {
 var def = Config{
 	Port: ":8000",
 	Database: Database{
-		ConnectionAddress:  "postgresql://root@crdb:26257/defaultdb",
+		ConnectionAddress:  "postgresql://root@127.0.0.1:26257/defaultdb",
 		RetryDelay:         time.Second,
 		MaxRetry:           20,
 		ConnectionLifetime: 30 * time.Minute,

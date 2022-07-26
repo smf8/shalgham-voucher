@@ -9,10 +9,11 @@ import (
 )
 
 type Voucher struct {
-	ID     int64   `json:"id"`
-	Code   string  `json:"code"`
-	Amount float64 `json:"amount"`
-	Limit  int     `json:"limit"`
+	ID        int64     `json:"id"`
+	Code      string    `json:"code"`
+	Amount    float64   `json:"amount"`
+	Limit     int       `json:"limit"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type Redemption struct {
@@ -110,7 +111,7 @@ func (v *SQLVoucherRepo) Save(voucher *Voucher) error {
 func (v *SQLVoucherRepo) Find(voucherCode string) (*Voucher, error) {
 	var result Voucher
 
-	if err := v.DB.Where("code = ?", voucherCode).Find(&result).Error; err != nil {
+	if err := v.DB.Where("code = ?", voucherCode).First(&result).Error; err != nil {
 		return nil, err
 	}
 
