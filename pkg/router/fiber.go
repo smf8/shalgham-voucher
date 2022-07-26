@@ -13,7 +13,7 @@ type ServerConfig struct {
 	NameSpace string `koanf:"name_space"`
 }
 
-func New(cfg ServerConfig) fiber.Router {
+func New(cfg ServerConfig) *fiber.App {
 	app := fiber.New()
 
 	app.Use(cors.New())
@@ -22,11 +22,9 @@ func New(cfg ServerConfig) fiber.Router {
 		app.Use(logger.New())
 	}
 
-	api := app.Group("/api")
-
 	prometheus := fiberprometheus.New(cfg.NameSpace)
 	prometheus.RegisterAt(app, "/metrics")
 	app.Use(prometheus.Middleware)
 
-	return api
+	return app
 }
