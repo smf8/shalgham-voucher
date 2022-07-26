@@ -33,7 +33,7 @@ func NewClient(cfg config.WalletClient) *Client {
 }
 
 func (c *Client) ApplyTransaction(phoneNumber string, transactionValue float64) error {
-	agent := c.httpClient.Post(c.baseURL + "/transactions").Timeout(c.timeout)
+	agent := c.httpClient.Post(c.baseURL + "/api/transactions").Timeout(c.timeout)
 
 	if c.debug {
 		agent.Debug()
