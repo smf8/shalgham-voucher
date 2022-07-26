@@ -22,7 +22,7 @@ COPY . /src
 # Put built binaries and runtime resources in /app dir ready to be copied over or used.
 RUN go build -ldflags '-w -s' .  && \
     mkdir -p /app && \
-    cp ./wallet ./wait-for-it.sh /app/ && \
+    cp ./voucher ./wait-for-it.sh /app/ && \
     cp -r /app/
 
 #
@@ -36,4 +36,4 @@ WORKDIR /app
 
 COPY --from=build /app /app/
 
-CMD ["./wallet"]
+CMD ["./voucher"]
