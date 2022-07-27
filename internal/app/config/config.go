@@ -52,6 +52,7 @@ var def = Config{
 		ConnectionLifetime: 30 * time.Minute,
 		MaxOpenConnections: 10,
 		MaxIdleConnections: 5,
+		LogLevel:           1,
 	},
 	Redis: redis.RedisConfig{
 		Addresses:       []string{"localhost:26379"},
