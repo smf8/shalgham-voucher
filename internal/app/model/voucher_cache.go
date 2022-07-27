@@ -28,6 +28,8 @@ func (c *InMemoryVoucherCache) GetVoucherAmount(voucherCode string) (float64, er
 
 	value, found := c.cache.Get(voucherCode)
 	if !found {
+		c.lock.RUnlock()
+
 		return 0, fmt.Errorf("voucher cache: voucher with code %s not found", voucherCode)
 	}
 
