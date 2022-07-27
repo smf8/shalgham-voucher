@@ -21,9 +21,31 @@ type RedisConfig struct {
 }
 
 func New(cfg RedisConfig) (redis.Cmdable, func() error) {
+	if cfg.MasterName == "" {
+		return newNormal(cfg)
+	}
+
 	client := redis.NewFailoverClient(&redis.FailoverOptions{
 		MasterName:      cfg.MasterName,
 		SentinelAddrs:   cfg.Addresses,
+		PoolSize:        cfg.PoolSize,
+		DialTimeout:     cfg.DialTimeout,
+		ReadTimeout:     cfg.ReadTimeout,
+		WriteTimeout:    cfg.WriteTimeout,
+		PoolTimeout:     cfg.PoolTimeout,
+		IdleTimeout:     cfg.IdleTimeout,
+		MinIdleConns:    cfg.MinIdleConns,
+		MaxRetries:      cfg.MaxRetries,
+		MinRetryBackoff: cfg.MinRetryBackoff,
+		MaxRetryBackoff: cfg.MaxRetryBackoff,
+	})
+
+	return client, client.Close
+}
+
+func newNormal(cfg RedisConfig) (redis.Cmdable, func() error) {
+	client := redis.NewClient(&redis.Options{
+		Addr:            cfg.Addresses[0],
 		PoolSize:        cfg.PoolSize,
 		DialTimeout:     cfg.DialTimeout,
 		ReadTimeout:     cfg.ReadTimeout,
