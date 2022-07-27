@@ -1,0 +1,31 @@
+
+log_level: error
+server:
+  port: :8000
+  debug: false
+  name_space: "voucher"
+database:
+  connection-address: postgres://postgres:{your_password}@smf8.postgres.database.azure.com/postgres?sslmode=require
+  log_level: 1
+wallet_client:
+  timeout: "5s"
+  debug: false
+  base_url: wallet:8001
+redis:
+  addresses:
+    [smf8.redis.cache.windows.net:6380]
+  master-name:
+  password: your_redis_password
+  pool-size: 100
+  min-idle-conns: 50
+  dial-timeout: 5s
+  read-timeout: 3s
+  write-timeout: 3s
+  pool-timeout: 4s
+  idle-timeout: 5m
+  max-retries: 5
+  min-retry-backoff: 1s
+  max-retry-backoff: 3s
+
+voucher_cache:
+  cron_pattern: "@every 30s"

@@ -1,0 +1,9 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  name: voucher-secrets
+data:
+  database-connection-string: >-
+    cG9zdGdyZXM6Ly9wb3N0Z3JlczpzTWYxMzc4OTkhIUBzbWY4LnBvc3RncmVzLmRhdGFiYXNlLmF6dXJlLmNvbS9wb3N0Z3Jlcz9zc2xtb2RlPXJlcXVpcmU=
+  redis-password: Vm16Z2J6UHBqNFFBcGNDTVFFN2RrcVladFFpNXFocmlXQXpDYU9GM1F5Yz0=
+type: Opaque

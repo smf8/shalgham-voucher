@@ -1,0 +1,38 @@
+{{- with .Values.config }}
+log_level: {{ .logLevel }}
+server:
+  port: {{ .server.port }}
+  debug: false
+  name_space: "voucher"
+database:
+  connection-address: {{ .database.connectionAddress }}
+  log_level: {{ .database.logLevel }}
+  connect-timeout: 5s
+  connection-lifetime: 10m
+  max-open-connections: 100
+  max-idle-connections: 50
+
+wallet_client:
+  timeout: "5s"
+  debug: false
+  base_url: {{ .wallet.baseURL }}
+redis:
+  addresses:
+    {{ .redis.addresses }}
+  master-name: {{ .redis.masterName }}
+  password: {{ .redis.password }}
+  pool-size: 100
+  min-idle-conns: 50
+  dial-timeout: 5s
+  read-timeout: 3s
+  write-timeout: 3s
+  pool-timeout: 4s
+  idle-timeout: 5m
+  max-retries: 5
+  min-retry-backoff: 1s
+  max-retry-backoff: 3s
+
+voucher_cache:
+  cron_pattern: {{ .voucherCache.cronPattern | quote }}
+
+{{ end }}
