@@ -10,7 +10,7 @@ import (
 
 type DatabaseConfig struct {
 	ConnectionAddress  string        `koanf:"connection-address"`
-	RetryDelay         time.Duration `koanf:"note-expiry"`
+	RetryDelay         time.Duration `koanf:"retry-delay"`
 	MaxRetry           uint          `koanf:"max-retry"`
 	ConnectionLifetime time.Duration `koanf:"connection-lifetime"`
 	MaxOpenConnections int           `koanf:"max-open-connections"`

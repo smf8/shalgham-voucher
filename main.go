@@ -56,6 +56,7 @@ func main() {
 	}
 
 	// Register Routes
+	app.Get("/healthz", handler.CheckHealth)
 	api := app.Group("/api")
 	api.Post("/vouchers", voucherHandler.Save)
 	api.Get("/vouchers", voucherHandler.GetVoucher)

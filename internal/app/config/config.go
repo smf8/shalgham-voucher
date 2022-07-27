@@ -87,7 +87,7 @@ func New() Config {
 		logrus.Fatalf("error loading default: %s", err)
 	}
 
-	if err := k.Load(file.Provider("config.yml"), yaml.Parser()); err != nil {
+	if err := k.Load(file.Provider("config.yaml"), yaml.Parser()); err != nil {
 		logrus.Errorf("error loading file: %s", err)
 	}
 

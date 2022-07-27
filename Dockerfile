@@ -20,11 +20,9 @@ COPY . /src
 
 # Build components.
 # Put built binaries and runtime resources in /app dir ready to be copied over or used.
-RUN go build -ldflags '-w -s' .  && \
+RUN go build -ldflags '-w -s' -o voucher .  && \
     mkdir -p /app && \
-    cp ./voucher ./wait-for-it.sh /app/ && \
-    cp -r /app/
-
+    cp ./voucher /app/
 #
 # 2. Runtime Container
 #
