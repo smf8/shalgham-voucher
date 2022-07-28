@@ -41,9 +41,12 @@ type VoucherCache struct {
 var def = Config{
 	LogLevel: "debug",
 	Server: router.ServerConfig{
-		Port:      ":8000",
-		Debug:     true,
-		NameSpace: "voucher",
+		Port:         ":8000",
+		Debug:        true,
+		NameSpace:    "voucher",
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 5 * time.Second,
+		IdleTimeout:  20 * time.Second,
 	},
 	Database: database.DatabaseConfig{
 		ConnectionAddress:  "postgresql://root@127.0.0.1:26257/defaultdb",
