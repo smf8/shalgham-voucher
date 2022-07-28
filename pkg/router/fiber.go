@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-const RequestTimeoutHeaderKey = "request-timeout"
+const RequestTimeoutHeaderKey = "Fiber-Request-Timeout"
 
 type ServerConfig struct {
 	Port         string        `koanf:"port"`

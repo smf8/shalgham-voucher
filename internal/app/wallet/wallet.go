@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/smf8/arvan-voucher/internal/app/config"
+	"github.com/smf8/arvan-voucher/pkg/router"
 	"net/http"
 	"strings"
 	"time"
@@ -45,6 +46,8 @@ func (c *Client) ApplyTransaction(phoneNumber string, transactionValue float64) 
 	}
 
 	agent.JSON(req)
+
+	agent.Set(router.RequestTimeoutHeaderKey, c.timeout.String())
 
 	responseCode, responseBody, errs := agent.String()
 	if len(errs) != 0 {
