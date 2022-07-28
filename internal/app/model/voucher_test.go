@@ -2,12 +2,13 @@ package model
 
 import (
 	"context"
+	"sync"
+	"testing"
+
 	"github.com/smf8/arvan-voucher/internal/app/config"
 	"github.com/smf8/arvan-voucher/pkg/database"
 	"github.com/smf8/arvan-voucher/pkg/redis"
 	"github.com/stretchr/testify/suite"
-	"sync"
-	"testing"
 )
 
 type VoucherTestSuite struct {
@@ -98,9 +99,9 @@ func (suite *VoucherTestSuite) TestVoucherRepo() {
 			Limit:  10,
 		}
 
-		suite.NoError(suite.voucherRepo.Save(v1))
+		suite.NoError(suite.voucherRepo.Save(context.Background(), v1))
 
-		result, err := suite.voucherRepo.Find(v1.Code)
+		result, err := suite.voucherRepo.Find(context.Background(), v1.Code)
 		suite.NoError(err)
 
 		suite.Equal(v1.Amount, result.Amount)
@@ -114,11 +115,11 @@ func (suite *VoucherTestSuite) TestVoucherRepo() {
 			Limit:  11,
 		}
 
-		suite.NoError(suite.voucherRepo.Save(v1))
+		suite.NoError(suite.voucherRepo.Save(context.Background(), v1))
 
-		suite.NoError(suite.voucherRepo.Delete(v1.Code))
+		suite.NoError(suite.voucherRepo.Delete(context.Background(), v1.Code))
 
-		result, err := suite.voucherRepo.Find(v1.Code)
+		result, err := suite.voucherRepo.Find(context.Background(), v1.Code)
 
 		suite.Error(err)
 		suite.Nil(result)

@@ -4,10 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/go-redis/redis/v8"
-	"gorm.io/gorm"
 	"strconv"
 	"time"
+
+	"github.com/go-redis/redis/v8"
+	"gorm.io/gorm"
 )
 
 var ErrRecordNotFound = errors.New("record not found")
@@ -69,7 +70,7 @@ func (r *RedisVoucherRemainderRepo) Use(ctx context.Context, voucherCode string)
 		return false, err
 	}
 
-	return result > 0, nil
+	return result >= 0, nil
 }
 
 func (r *RedisVoucherRemainderRepo) Get(ctx context.Context, voucherCode string) (int, error) {

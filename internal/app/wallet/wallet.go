@@ -2,12 +2,13 @@ package wallet
 
 import (
 	"fmt"
-	"github.com/gofiber/fiber/v2"
-	"github.com/smf8/arvan-voucher/internal/app/config"
-	"github.com/smf8/arvan-voucher/pkg/router"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/smf8/arvan-voucher/internal/app/config"
+	"github.com/smf8/arvan-voucher/pkg/router"
 )
 
 type Client struct {

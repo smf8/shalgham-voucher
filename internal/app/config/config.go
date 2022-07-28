@@ -2,11 +2,12 @@ package config
 
 import (
 	"fmt"
+	"strings"
+	"time"
+
 	"github.com/smf8/arvan-voucher/pkg/database"
 	"github.com/smf8/arvan-voucher/pkg/redis"
 	"github.com/smf8/arvan-voucher/pkg/router"
-	"strings"
-	"time"
 
 	"github.com/sirupsen/logrus"
 

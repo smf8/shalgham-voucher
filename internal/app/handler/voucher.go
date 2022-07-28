@@ -2,10 +2,11 @@ package handler
 
 import (
 	"errors"
+	"net/http"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
 	"github.com/smf8/arvan-voucher/internal/app/model"
-	"net/http"
 )
 
 type Voucher struct {

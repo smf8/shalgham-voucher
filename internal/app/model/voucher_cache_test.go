@@ -1,10 +1,11 @@
 package model
 
 import (
+	"testing"
+
 	"github.com/smf8/arvan-voucher/internal/app/config"
 	"github.com/smf8/arvan-voucher/pkg/database"
 	"github.com/stretchr/testify/suite"
-	"testing"
 )
 
 type VoucherCacheTestSuite struct {

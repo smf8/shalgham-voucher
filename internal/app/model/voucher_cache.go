@@ -3,10 +3,11 @@ package model
 import (
 	"context"
 	"fmt"
+	"sync"
+
 	"github.com/patrickmn/go-cache"
 	"github.com/robfig/cron/v3"
 	"github.com/sirupsen/logrus"
-	"sync"
 )
 
 type InMemoryVoucherCache struct {

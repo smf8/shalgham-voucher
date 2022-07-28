@@ -2,11 +2,12 @@ package router
 
 import (
 	"context"
+	"time"
+
 	"github.com/ansrivas/fiberprometheus/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"time"
 )
 
 const RequestTimeoutHeaderKey = "Fiber-Request-Timeout"

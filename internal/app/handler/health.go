@@ -1,8 +1,9 @@
 package handler
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"net/http"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 func CheckHealth(c *fiber.Ctx) error {

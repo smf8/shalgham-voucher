@@ -1,11 +1,12 @@
 package database
 
 import (
+	"time"
+
 	"github.com/avast/retry-go/v4"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"time"
 )
 
 type DatabaseConfig struct {
