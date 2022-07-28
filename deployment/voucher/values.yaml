@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
+replicaCount: 6
 
 image:
   repository: smf8/arvan-voucher
@@ -65,8 +65,8 @@ resources:
      cpu: 500m
      memory: 1Gi
    requests:
-     cpu: 500m
-     memory: 1Gi
+     cpu: 250m
+     memory: 500Mi
 
 autoscaling:
   enabled: false
@@ -87,19 +87,24 @@ env:
       secretKeyRef:
         name: voucher-secrets
         key: database-connection-string
+  - name: VOUCHER_REDIS_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: voucher-secrets
+        key: redis-password
 
 config:
-  logLevel: "error"
+  logLevel: "debug"
   server:
     port: ":8000"
   database:
     connectionAddress: "postgres://postgres:{your_password}@smf8.postgres.database.azure.com/postgres?sslmode=require"
-    logLevel: 1
+    logLevel: 4
   wallet:
-    baseURL: "wallet:8001"
+    baseURL: "http://10.0.64.137:8000"
   redis:
     addresses:
-      - "smf8.redis.cache.windows.net:6380"
+      - "smf8.redis.cache.windows.net:6379"
     masterName: ""
     password: "your_redis_password"
 

@@ -4,6 +4,9 @@ server:
   port: {{ .server.port }}
   debug: false
   name_space: "voucher"
+  read_timeout: "100s"
+  write_timeout: "100s"
+  idle_timeout: "100s"
 database:
   connection-address: {{ .database.connectionAddress }}
   log_level: {{ .database.logLevel }}
@@ -13,7 +16,7 @@ database:
   max-idle-connections: 50
 
 wallet_client:
-  timeout: "5s"
+  timeout: "50s"
   debug: false
   base_url: {{ .wallet.baseURL }}
 redis:
