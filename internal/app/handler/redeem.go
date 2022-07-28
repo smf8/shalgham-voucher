@@ -49,35 +49,44 @@ func (r *Redeemer) RedeemVoucher(c *fiber.Ctx) error {
 	if !valid {
 		logrus.Debugf("voucher remainder repo: not valid")
 
+		// for sake of report accuracy we should set transactionErr to revert Decr
+		// but since number of requests for invalid vouchers are very high,
+		//we can skip calling revert Incr in favor of Redis performance
 		return c.SendStatus(http.StatusNotFound)
 	}
 
-	var transactionErr error
+	// revert is an inline function to revert parts of transaction before the failure
+	revert := func(code string, redemption *model.Redemption) {
+		if err := r.VoucherRemainderRepo.Revert(c.UserContext(), request.Code); err != nil {
+			logrus.Errorf("redeem remainder revert failed: %s", err.Error())
+		}
 
-	// if transaction fails. we revert counter decrease
-	defer func() {
-		if transactionErr != nil {
-			if err := r.VoucherRemainderRepo.Revert(c.UserContext(), request.Code); err != nil {
-				logrus.Errorf("redeem revert failed: %s", err.Error())
+		if redemption != nil {
+			if err := r.RedemptionRepo.Delete(redemption); err != nil {
+				logrus.Errorf("redeem redemption revert failed: %s", err.Error())
 			}
 		}
-	}()
+	}
 
 	redemption := &model.Redemption{
 		VoucherCode: request.Code,
 		Redeemer:    request.PhoneNumber,
 	}
 
-	transactionErr = r.Client.ApplyTransaction(request.PhoneNumber, voucherAmount)
-	if transactionErr != nil {
-		logrus.Errorf("transaction apply failed: %s", transactionErr.Error())
+	err = r.RedemptionRepo.Create(redemption)
+	if err != nil {
+		logrus.Errorf("redemption create failed: %s", err.Error())
+
+		revert(request.Code, nil)
 
 		return c.SendStatus(http.StatusInternalServerError)
 	}
 
-	transactionErr = r.RedemptionRepo.Create(redemption)
-	if transactionErr != nil {
-		logrus.Errorf("redemption create failed: %s", transactionErr.Error())
+	err = r.Client.ApplyTransaction(request.PhoneNumber, voucherAmount)
+	if err != nil {
+		logrus.Errorf("transaction apply failed: %s", err.Error())
+
+		revert(request.Code, redemption)
 
 		return c.SendStatus(http.StatusInternalServerError)
 	}

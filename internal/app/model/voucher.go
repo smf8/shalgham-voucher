@@ -42,6 +42,7 @@ type VoucherRepo interface {
 }
 
 type RedemptionRepo interface {
+	Delete(redemption *Redemption) error
 	Create(redemption *Redemption) error
 	FindRedemptions(voucherCode string, limit, offset int) ([]Redemption, error)
 }
@@ -91,6 +92,10 @@ func (r *RedisVoucherRemainderRepo) Revert(ctx context.Context, voucherCode stri
 
 func (r *RedisVoucherRemainderRepo) Create(ctx context.Context, voucherCode string, remainder int) error {
 	return r.Redis.Set(ctx, r.voucherRemainderKey(voucherCode), remainder, 0).Err()
+}
+
+func (r *SQLRedemptionRepo) Delete(redemption *Redemption) error {
+	return r.DB.Delete(redemption).Error
 }
 
 func (r *SQLRedemptionRepo) Create(redemption *Redemption) error {
