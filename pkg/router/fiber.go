@@ -1,12 +1,15 @@
 package router
 
 import (
+	"context"
 	"github.com/ansrivas/fiberprometheus/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"time"
 )
+
+const RequestTimeoutHeaderKey = "request-timeout"
 
 type ServerConfig struct {
 	Port         string        `koanf:"port"`
@@ -34,5 +37,27 @@ func New(cfg ServerConfig) *fiber.App {
 	prometheus.RegisterAt(app, "/metrics")
 	app.Use(prometheus.Middleware)
 
+	app.Use(TimeoutContextMiddleware(cfg.WriteTimeout))
+
 	return app
+}
+
+func TimeoutContextMiddleware(timeout time.Duration) fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		timeoutDuration, ok := ctx.GetReqHeaders()[RequestTimeoutHeaderKey]
+		if ok {
+			newTimeout, err := time.ParseDuration(timeoutDuration)
+			if err == nil {
+				timeout = newTimeout
+			}
+		}
+
+		reqCtx, cancel := context.WithTimeout(ctx.UserContext(), timeout)
+
+		defer cancel()
+
+		ctx.SetUserContext(reqCtx)
+
+		return ctx.Next()
+	}
 }

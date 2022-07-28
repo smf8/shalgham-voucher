@@ -35,16 +35,16 @@ type VoucherRemainderRepo interface {
 }
 
 type VoucherRepo interface {
-	Save(voucher *Voucher) error
-	Find(voucherCode string) (*Voucher, error)
-	FindAll() ([]Voucher, error)
-	Delete(voucherCode string) error
+	Save(ctx context.Context, voucher *Voucher) error
+	Find(ctx context.Context, voucherCode string) (*Voucher, error)
+	FindAll(ctx context.Context) ([]Voucher, error)
+	Delete(ctx context.Context, voucherCode string) error
 }
 
 type RedemptionRepo interface {
-	Delete(redemption *Redemption) error
-	Create(redemption *Redemption) error
-	FindRedemptions(voucherCode string, limit, offset int) ([]Redemption, error)
+	Delete(ctx context.Context, redemption *Redemption) error
+	Create(ctx context.Context, redemption *Redemption) error
+	FindRedemptions(ctx context.Context, voucherCode string, limit, offset int) ([]Redemption, error)
 }
 
 type SQLVoucherRepo struct {
@@ -94,18 +94,18 @@ func (r *RedisVoucherRemainderRepo) Create(ctx context.Context, voucherCode stri
 	return r.Redis.Set(ctx, r.voucherRemainderKey(voucherCode), remainder, 0).Err()
 }
 
-func (r *SQLRedemptionRepo) Delete(redemption *Redemption) error {
-	return r.DB.Delete(redemption).Error
+func (r *SQLRedemptionRepo) Delete(ctx context.Context, redemption *Redemption) error {
+	return r.DB.WithContext(ctx).Delete(redemption).Error
 }
 
-func (r *SQLRedemptionRepo) Create(redemption *Redemption) error {
-	return r.DB.Create(redemption).Error
+func (r *SQLRedemptionRepo) Create(ctx context.Context, redemption *Redemption) error {
+	return r.DB.WithContext(ctx).Create(redemption).Error
 }
 
-func (r *SQLRedemptionRepo) FindRedemptions(voucherCode string, limit, offset int) ([]Redemption, error) {
+func (r *SQLRedemptionRepo) FindRedemptions(ctx context.Context, voucherCode string, limit, offset int) ([]Redemption, error) {
 	var result []Redemption
 
-	err := r.DB.Where("voucher_code = ?", voucherCode).Limit(limit).Offset(offset).Find(&result).Error
+	err := r.DB.WithContext(ctx).Where("voucher_code = ?", voucherCode).Limit(limit).Offset(offset).Find(&result).Error
 	if err != nil {
 		return nil, err
 	}
@@ -113,14 +113,14 @@ func (r *SQLRedemptionRepo) FindRedemptions(voucherCode string, limit, offset in
 	return result, nil
 }
 
-func (v *SQLVoucherRepo) Save(voucher *Voucher) error {
-	return v.DB.Save(voucher).Error
+func (v *SQLVoucherRepo) Save(ctx context.Context, voucher *Voucher) error {
+	return v.DB.WithContext(ctx).Save(voucher).Error
 }
 
-func (v *SQLVoucherRepo) Find(voucherCode string) (*Voucher, error) {
+func (v *SQLVoucherRepo) Find(ctx context.Context, voucherCode string) (*Voucher, error) {
 	var result Voucher
 
-	if err := v.DB.Where("code = ?", voucherCode).First(&result).Error; err != nil {
+	if err := v.DB.WithContext(ctx).Where("code = ?", voucherCode).First(&result).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, fmt.Errorf("sql voucher find error: %w", ErrRecordNotFound)
 		}
@@ -131,16 +131,16 @@ func (v *SQLVoucherRepo) Find(voucherCode string) (*Voucher, error) {
 	return &result, nil
 }
 
-func (v *SQLVoucherRepo) FindAll() ([]Voucher, error) {
+func (v *SQLVoucherRepo) FindAll(ctx context.Context) ([]Voucher, error) {
 	var result []Voucher
 
-	if err := v.DB.Find(&result).Error; err != nil {
+	if err := v.DB.WithContext(ctx).Find(&result).Error; err != nil {
 		return nil, err
 	}
 
 	return result, nil
 }
 
-func (v *SQLVoucherRepo) Delete(voucherCode string) error {
-	return v.DB.Where("code = ?", voucherCode).Delete(&Voucher{}).Error
+func (v *SQLVoucherRepo) Delete(ctx context.Context, voucherCode string) error {
+	return v.DB.WithContext(ctx).Where("code = ?", voucherCode).Delete(&Voucher{}).Error
 }
