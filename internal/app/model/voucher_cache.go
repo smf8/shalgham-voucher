@@ -1,6 +1,7 @@
 package model
 
 import (
+	"context"
 	"fmt"
 	"github.com/patrickmn/go-cache"
 	"github.com/robfig/cron/v3"
@@ -64,7 +65,7 @@ func (c *InMemoryVoucherCache) Start(cronPattern string) error {
 }
 
 func (c *InMemoryVoucherCache) fetch() error {
-	vouchers, err := c.repo.FindAll()
+	vouchers, err := c.repo.FindAll(context.Background())
 	if err != nil {
 		return fmt.Errorf("voucher cache: failed to find all vouchers: %s", err.Error())
 	}

@@ -21,7 +21,8 @@ func (v *Voucher) Report(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).SendString(err.Error())
 	}
 
-	redemptions, err := v.RedemptionRepo.FindRedemptions(request.Code, request.Limit, request.Offset)
+	redemptions, err := v.RedemptionRepo.FindRedemptions(c.UserContext(),
+		request.Code, request.Limit, request.Offset)
 	if err != nil {
 		logrus.Errorf("find redemptions failed: %s", err.Error())
 
@@ -42,7 +43,7 @@ func (v *Voucher) GetVoucher(c *fiber.Ctx) error {
 		return c.SendStatus(http.StatusBadRequest)
 	}
 
-	voucher, err := v.VoucherRepo.Find(voucherCode)
+	voucher, err := v.VoucherRepo.Find(c.UserContext(), voucherCode)
 	if err != nil {
 		if errors.Is(err, model.ErrRecordNotFound) {
 			return c.SendStatus(http.StatusNotFound)
@@ -78,7 +79,7 @@ func (v *Voucher) Save(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).SendString(err.Error())
 	}
 
-	if err := v.VoucherRepo.Save(voucherRequest); err != nil {
+	if err := v.VoucherRepo.Save(c.UserContext(), voucherRequest); err != nil {
 		logrus.Errorf("voucher save failed: %s", err.Error())
 
 		return c.SendStatus(http.StatusInternalServerError)

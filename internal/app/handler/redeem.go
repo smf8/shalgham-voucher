@@ -62,7 +62,7 @@ func (r *Redeemer) RedeemVoucher(c *fiber.Ctx) error {
 		}
 
 		if redemption != nil {
-			if err := r.RedemptionRepo.Delete(redemption); err != nil {
+			if err := r.RedemptionRepo.Delete(c.UserContext(), redemption); err != nil {
 				logrus.Errorf("redeem redemption revert failed: %s", err.Error())
 			}
 		}
@@ -73,7 +73,7 @@ func (r *Redeemer) RedeemVoucher(c *fiber.Ctx) error {
 		Redeemer:    request.PhoneNumber,
 	}
 
-	err = r.RedemptionRepo.Create(redemption)
+	err = r.RedemptionRepo.Create(c.UserContext(), redemption)
 	if err != nil {
 		logrus.Errorf("redemption create failed: %s", err.Error())
 
