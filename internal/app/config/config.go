@@ -50,7 +50,7 @@ var def = Config{
 		IdleTimeout:  10 * time.Second,
 	},
 	Database: database.DatabaseConfig{
-		ConnectionAddress:  "postgresql://root@127.0.0.1:26257/defaultdb",
+		ConnectionAddress:  "postgresql://root@127.0.0.1:26257/voucherdb",
 		RetryDelay:         time.Second,
 		MaxRetry:           20,
 		ConnectionLifetime: 30 * time.Minute,
