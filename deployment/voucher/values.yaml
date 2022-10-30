@@ -5,7 +5,7 @@
 replicaCount: 6
 
 image:
-  repository: smf8/arvan-voucher
+  repository: smf8/shalgham-voucher
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"

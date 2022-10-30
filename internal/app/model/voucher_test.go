@@ -5,9 +5,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/smf8/arvan-voucher/internal/app/config"
-	"github.com/smf8/arvan-voucher/pkg/database"
-	"github.com/smf8/arvan-voucher/pkg/redis"
+	"github.com/smf8/shalgham-voucher/internal/app/config"
+	"github.com/smf8/shalgham-voucher/pkg/database"
+	"github.com/smf8/shalgham-voucher/pkg/redis"
 	"github.com/stretchr/testify/suite"
 )
 

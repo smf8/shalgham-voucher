@@ -73,7 +73,7 @@ Following technologies are used in application:
 Both Voucher and Wallet applications are designed and implemented to scale per load. But Redis/SQL connection limits must be considered and tweaked to support autoscaling completely.
 
 #### API
-A Postman collection of all possible API calls are available in [arvan_challenge.json](arvan_challange.json).
+A Postman collection of all possible API calls are available in [challenge.json](challange.json).
 
 #### Voucher redemption flow
 1. In Memory Cache Check

@@ -6,14 +6,14 @@ import (
 	"syscall"
 
 	"github.com/sirupsen/logrus"
-	"github.com/smf8/arvan-voucher/internal/app/config"
-	"github.com/smf8/arvan-voucher/internal/app/handler"
-	"github.com/smf8/arvan-voucher/internal/app/model"
-	"github.com/smf8/arvan-voucher/internal/app/wallet"
-	"github.com/smf8/arvan-voucher/pkg/database"
-	"github.com/smf8/arvan-voucher/pkg/log"
-	"github.com/smf8/arvan-voucher/pkg/redis"
-	"github.com/smf8/arvan-voucher/pkg/router"
+	"github.com/smf8/shalgham-voucher/internal/app/config"
+	"github.com/smf8/shalgham-voucher/internal/app/handler"
+	"github.com/smf8/shalgham-voucher/internal/app/model"
+	"github.com/smf8/shalgham-voucher/internal/app/wallet"
+	"github.com/smf8/shalgham-voucher/pkg/database"
+	"github.com/smf8/shalgham-voucher/pkg/log"
+	"github.com/smf8/shalgham-voucher/pkg/redis"
+	"github.com/smf8/shalgham-voucher/pkg/router"
 )
 
 func main() {

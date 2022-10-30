@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/smf8/arvan-voucher/internal/app/config"
-	"github.com/smf8/arvan-voucher/pkg/router"
+	"github.com/smf8/shalgham-voucher/internal/app/config"
+	"github.com/smf8/shalgham-voucher/pkg/router"
 )
 
 type Client struct {

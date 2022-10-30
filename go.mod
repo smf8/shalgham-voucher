@@ -1,4 +1,4 @@
-module github.com/smf8/arvan-voucher
+module github.com/smf8/shalgham-voucher
 
 go 1.18
 
