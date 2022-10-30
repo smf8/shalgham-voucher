@@ -1,5 +1,12 @@
 # Voucher Manager
 
+# Problem
+We need 2 microservices to handle the scenario in which around 40 million users try to redeem vouchers with the restrictions:
+- Voucher redemption cannot exceed the voucher limit (i.e., voucher with 300 limit can only be used by 300 unique users)
+- No downtime or disruption is expected.
+- All operations must be atomic.
+
+
 # Architecture
 Service will listen through HTTP API for voucher redemption requests. Redeeming is done atomically to avoid inconsistency. 
 
